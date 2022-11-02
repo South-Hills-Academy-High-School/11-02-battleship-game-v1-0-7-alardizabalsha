@@ -97,13 +97,18 @@ function isPlayerXWinner (enemyBoats: Sprite[][], hitOrMissPX: Sprite[]) {
     return killCount
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (isAttackingTwice(hitOrMissP1)) {
-    	
-    } else if (moveBoatFlag == 3) {
+    if (moveBoatFlag == 3) {
         if (currentPlayer == "Player1") {
-            isHitOrMiss(boatSpriteArrayP2, hitOrMissP1)
-            switchPlayer()
+            if (isAttackingTwice(hitOrMissP1)) {
+                game.splash(" Thats the wrong MOVWE!!")
+            } else {
+                isHitOrMiss(boatSpriteArrayP2, hitOrMissP1)
+                switchPlayer()
+            }
         } else {
+            if (isAttackingTwice(hitOrMissP2)) {
+                game.splash(" Thats the wrong MOVWE!!")
+            }
             isHitOrMiss(boatSpriteArrayP1, hitOrMissP2)
             switchPlayer()
         }
@@ -191,7 +196,7 @@ function moveBoat (boatArray: any[], boatRotateArray: string[]) {
         iterator += 1
     }
 }
-function isHitOrMiss (enemyBoats: Sprite[][], hitOrMissPX: Sprite[]) {
+function isHitOrMiss (enemyBoats: Sprite[][], hitOrMissPX: Sprite[][]) {
     if (currentPlayer == "Player1") {
         hitOrMissPlayer = "Player 1"
     } else if (currentPlayer == "Player2" && singlePlayerFlag == 1) {
@@ -452,6 +457,8 @@ function cpuPlaceBoat1 () {
     }
 }
 function isAttackingTwice (boomSpriteArrayPX: Sprite[]) {
+    grid.place(shadowCursor, tiles.getTileLocation(-10, -10))
+    boomSprite[0] = shadowCursor
     for (let currentBoomSprite of boomSpriteArrayPX) {
         if (grid.spriteCol(currentBoomSprite) == grid.spriteCol(cursor) && grid.spriteRow(currentBoomSprite) == grid.spriteRow(cursor)) {
             return 1
@@ -681,7 +688,7 @@ function isOverlapping (boatSpriteArrayPX: Sprite[][]) {
     }
     return 0
 }
-let boomSprite: Sprite = null
+let boomSprite: Sprite[] = []
 let hitOrMissPlayer = ""
 let iterator = 0
 let hitOrMissP1: Sprite[] = []
