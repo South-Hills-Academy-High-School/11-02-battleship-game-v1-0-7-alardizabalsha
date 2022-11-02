@@ -39,6 +39,8 @@ function updatePX (whichPlayer: string) {
     }
 }
 function placeAllCPUBoats () {
+    cpulasthitrow = -1
+    cpulasthitcloumn = -1
     cpuPlaceBoat0()
     cpuPlaceBoat1()
     cpuPlaceBoat2()
@@ -69,8 +71,12 @@ function makeBoatVisible (boatArray: Sprite[]) {
     }
 }
 function cpuMove () {
+    let list: number[] = []
     game.splash("CPU Move")
     grid.place(cursor, tiles.getTileLocation(randint(0, 9), randint(0, 6)))
+    while (isAttackingTwice(list)) {
+        grid.place(cursor, tiles.getTileLocation(randint(0, 9), randint(0, 6)))
+    }
     isHitOrMiss(boatSpriteArrayP1, hitOrMissP2)
     switchPlayer()
 }
@@ -130,6 +136,9 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     grid.move(cursor, -1, 0)
     grid.place(shadowCursor, tiles.getTileLocation(grid.spriteCol(cursor) + 1, grid.spriteRow(cursor)))
 })
+function xpuhitormiss () {
+    game.splash("Row" + "Col")
+}
 function switchPlayer () {
     if (moveBoatFlag == 2) {
         cursor.setFlag(SpriteFlag.Invisible, false)
@@ -695,6 +704,8 @@ let hitOrMissP1: Sprite[] = []
 let currentBoatBoomCounter = 0
 let killCount = 0
 let hitOrMissP2: Sprite[] = []
+let cpulasthitcloumn = 0
+let cpulasthitrow = 0
 let boatRotateArrayP2: string[] = []
 let boatSpriteArrayP2: Sprite[][] = []
 let boatRotateArrayP1: string[] = []
